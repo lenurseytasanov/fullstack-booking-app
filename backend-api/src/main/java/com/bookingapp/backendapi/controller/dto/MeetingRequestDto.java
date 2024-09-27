@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpFormFieldDto {
+public class MeetingRequestDto {
 
-    private String name;
+    private Long availablePlaces;
 
-    private Boolean required;
+    private OffsetDateTime startsAt;
 
 }

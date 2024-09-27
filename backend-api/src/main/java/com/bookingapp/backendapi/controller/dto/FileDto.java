@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileUploadDto {
+public class FileDto {
 
-    private String fileName;
+    private String fileId;
 
 }

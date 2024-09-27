@@ -9,9 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDto {
-
-    private String id;
+public class EventRequestDto {
 
     private String name;
 
@@ -19,7 +17,7 @@ public class EventDto {
 
     private List<FileDto> files;
 
-    private List<MeetingDto> meetings;
+    private List<MeetingRequestDto> meetings;
 
     private List<ParticipantAttributeDto> formFields;
 
