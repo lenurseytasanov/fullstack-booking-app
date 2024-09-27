@@ -1,0 +1,7 @@
+spring:
+    application:
+        name: backend-api
+
+springdoc:
+    swagger-ui:
+        path: /swagger-ui
