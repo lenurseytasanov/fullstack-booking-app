@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticipantDto {
+public class ParticipantRequestDto {
 
     @Schema(description = "Дополнительные атрибуты участника")
     private Map<String, String> attributes;

@@ -1,7 +1,7 @@
 package com.bookingapp.web.dto.event;
 
 import com.bookingapp.web.dto.file.FileDto;
-import com.bookingapp.web.dto.meeting.MeetingDto;
+import com.bookingapp.web.dto.meeting.MeetingRequestDto;
 import com.bookingapp.web.dto.participant.ParticipantAttributeDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDto {
+public class EventRequestDto {
 
     @NotBlank
     @Schema(example = "Иванов Иван Иванович", description = "ФИО администратора")
@@ -33,7 +33,7 @@ public class EventDto {
 
     private List<FileDto> files;
 
-    private List<MeetingDto> meetings;
+    private List<MeetingRequestDto> meetings;
 
     private List<ParticipantAttributeDto> formFields;
 

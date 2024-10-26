@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MeetingDto {
+public class MeetingRequestDto {
 
     @Min(0)
     @Schema(description = "Количество доступных мест")
