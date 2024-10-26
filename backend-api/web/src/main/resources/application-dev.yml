@@ -1,0 +1,36 @@
+spring:
+    security:
+        oauth2:
+            client:
+                registration:
+                    auth0:
+                        provider: auth0
+                        clientId: ${AUTH0_CLIENT_ID}
+                        clientSecret: ${AUTH0_CLIENT_SECRET}
+                        redirect-uri: https://localhost/login/oauth2/code/auth0
+                        authorization-grant-type: authorization_code
+                        scope: read, openid
+                provider:
+                    auth0:
+                        authorization-uri: https://event-booking-service.eu.auth0.com/authorize
+                        token-uri: https://event-booking-service.eu.auth0.com/oauth/token
+                        user-info-uri: https://event-booking-service.eu.auth0.com/userinfo
+                        user-name-attribute: sub
+                        jwk-set-uri: https://event-booking-service.eu.auth0.com/.well-known/jwks.json
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://postgres:5432/main_db
+        username: ${POSTGRES_USER}
+        password: ${POSTGRES_PASS}
+    jpa:
+        hibernate:
+            ddl-auto: validate
+    liquibase:
+        enabled: false
+
+logging:
+    config: classpath:log4j2-dev.xml
+    level:
+        com.bookingapp: INFO
+        org.springframework.security: TRACE
+        org.springframework.web: TRACE
