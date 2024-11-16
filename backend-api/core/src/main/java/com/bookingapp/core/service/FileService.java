@@ -6,13 +6,16 @@ import com.bookingapp.core.repository.FileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileService {
 
     private final FileRepository fileRepository;
@@ -25,13 +28,18 @@ public class FileService {
     }
 
     public FileEntity saveFile(@NonNull FileEntity fileEntity, @NonNull InputStream fileData) {
-        String s3reference = s3Client.uploadFile(fileData);
-        fileEntity.setObjectName(s3reference);
-        return fileRepository.save(fileEntity);
+        String objectName = UUID.randomUUID().toString();
+        s3Client.putObject(objectName, fileData);
+        fileEntity.setObjectName(objectName);
+        FileEntity saved = fileRepository.save(fileEntity);
+        log.info("File '%s' uploaded with object_name '%s'".formatted(saved.getId(), objectName));
+        return saved;
     }
 
-    public InputStream getFile(@NonNull UUID fileId) {
-        return s3Client.downloadFile(fileId);
+    public Supplier<InputStream> getFile(@NonNull UUID fileId) {
+        String objectName = fileRepository.findById(fileId).orElseThrow(
+                () -> new EntityNotFoundException("File with ID '%s' not found".formatted(fileId))).getObjectName();
+        return s3Client.getObject(objectName);
     }
 
 }

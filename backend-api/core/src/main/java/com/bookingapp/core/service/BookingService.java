@@ -7,6 +7,7 @@ import com.bookingapp.core.exception.ParticipantAttributeException;
 import com.bookingapp.core.repository.ParticipantRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookingService {
 
     private final ParticipantAttributeService participantAttributeService;
@@ -67,7 +69,9 @@ public class BookingService {
                 .map(meetingService::findById)
                 .forEach(meeting -> meeting.addParticipant(participant));
 
-        return participantRepository.save(participant);
+        Participant saved = participantRepository.save(participant);
+        log.info("Participant '%s' created".formatted(saved.getId()));
+        return saved;
     }
 
     private void validateEvent(UUID eventId) {

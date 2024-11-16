@@ -5,6 +5,7 @@ import com.bookingapp.core.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EventService {
 
     private final EventRepository eventRepository;
@@ -36,6 +38,7 @@ public class EventService {
         fileIds.stream()
                 .map(fileService::getFileEntity)
                 .forEach(eventRef::addFile);
+        log.info("Event '%s' created".formatted(eventRef.getId()));
         return eventRef;
     }
 
@@ -52,6 +55,7 @@ public class EventService {
         fileIds.stream()
                 .map(fileService::getFileEntity)
                 .forEach(eventRef::addFile);
+        log.info("Event '%s' updated".formatted(eventRef.getId()));
         return eventRef;
     }
 
@@ -60,6 +64,7 @@ public class EventService {
             throw new EntityNotFoundException(EVENT_NOT_FOUND.formatted(id));
         }
         eventRepository.deleteById(id);
+        log.info("Event '%s' deleted".formatted(id));
     }
 
 }

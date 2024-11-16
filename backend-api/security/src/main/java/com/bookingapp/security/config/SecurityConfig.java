@@ -26,7 +26,7 @@ public class SecurityConfig {
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
                     return corsConfiguration;
                 }))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("**").permitAll())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain debugSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("**").permitAll())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .build();
     }
 }

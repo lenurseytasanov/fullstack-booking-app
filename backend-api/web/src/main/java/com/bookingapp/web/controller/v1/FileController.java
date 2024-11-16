@@ -6,18 +6,25 @@ import com.bookingapp.web.dto.file.FileDto;
 import com.bookingapp.web.mapper.FileMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/files")
@@ -29,9 +36,16 @@ public class FileController {
 
     private final FileMapper fileMapper;
 
-    @Operation(summary = "Загрузить файл описания мероприятия")
-    @PostMapping
-    public ResponseEntity<FileDto> upload(@NotNull @RequestParam("file") MultipartFile file) throws IOException {
+    @Operation(summary = "Загрузить файл описания мероприятия. (Multipart request)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = FileDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Validation error", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+    })
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FileDto> upload(
+            @Parameter(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)) @RequestParam("file") MultipartFile file) throws IOException {
         var fileEntity = new FileEntity();
         fileEntity.setName(file.getOriginalFilename());
         fileEntity.setSize(file.getSize());
@@ -41,9 +55,16 @@ public class FileController {
     }
 
     @Operation(summary = "Скачать файл описания мероприятия")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> getFile(@NotNull @Parameter(description = "ID файла") @PathVariable("id") Long fileId) {
-        return ResponseEntity.ok(new ByteArrayResource("1234567890".getBytes()));
+    public ResponseEntity<Resource> getFile(@Parameter(description = "ID файла") @PathVariable("id") UUID fileId) throws IOException {
+        try (InputStream data = fileService.getFile(fileId).get()) {
+            return ResponseEntity.ok(new ByteArrayResource(data.readAllBytes()));
+        }
     }
 
 }

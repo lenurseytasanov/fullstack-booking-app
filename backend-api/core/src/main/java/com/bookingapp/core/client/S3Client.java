@@ -1,12 +1,14 @@
 package com.bookingapp.core.client;
 
+import lombok.NonNull;
+
 import java.io.InputStream;
-import java.util.UUID;
+import java.util.function.Supplier;
 
 public interface S3Client {
 
-    String uploadFile(InputStream fileData);
+    Supplier<InputStream> getObject(@NonNull String objectName);
 
-    InputStream downloadFile(UUID fileId);
+    void putObject(@NonNull String objectName, @NonNull InputStream object);
 
 }

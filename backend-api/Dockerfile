@@ -3,7 +3,6 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine as builder
 WORKDIR /app
 COPY pom.xml .
 COPY --parents */pom.xml .
-
 RUN mvn -B dependency:go-offline
 COPY . .
 RUN mvn -f pom.xml clean package -Dmaven.test.skip=true

@@ -19,3 +19,9 @@ logging:
         com.bookingapp: WARN
         org.springframework.security: WARN
         org.springframework.web: WARN
+
+minio:
+    url: http://minio:9000
+    access-key: ${MINIO_USER}
+    secret-key: ${MINIO_PASS}
+    bucket-name: default
