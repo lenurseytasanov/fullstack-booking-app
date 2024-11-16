@@ -26,11 +26,14 @@ spring:
         hibernate:
             ddl-auto: validate
     liquibase:
-        enabled: false
+        enabled: true
+        drop-first: false
+        change-log: classpath:db/changelog/master.xml
+        default-schema: public
 
 logging:
     config: classpath:log4j2-dev.xml
     level:
         com.bookingapp: INFO
-        org.springframework.security: TRACE
-        org.springframework.web: TRACE
+        org.springframework.security: INFO
+        org.springframework.web: INFO

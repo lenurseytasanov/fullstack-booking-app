@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -38,5 +39,32 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private final Set<ParticipantAttribute> participantAttributes = new LinkedHashSet<>();
+
+    public Set<FileEntity> getFileEntities() {
+        return Collections.unmodifiableSet(fileEntities);
+    }
+
+    public Set<Meeting> getMeetings() {
+        return Collections.unmodifiableSet(meetings);
+    }
+
+    public Set<ParticipantAttribute> getParticipantAttributes() {
+        return Collections.unmodifiableSet(participantAttributes);
+    }
+
+    public void addFile(FileEntity fileEntity) {
+        fileEntities.add(fileEntity);
+        fileEntity.setEvent(this);
+    }
+
+    public void addMeeting(Meeting meeting) {
+        meetings.add(meeting);
+        meeting.setEvent(this);
+    }
+
+    public void addParticipantAttribute(ParticipantAttribute participantAttribute) {
+        participantAttributes.add(participantAttribute);
+        participantAttribute.setEvent(this);
+    }
 
 }

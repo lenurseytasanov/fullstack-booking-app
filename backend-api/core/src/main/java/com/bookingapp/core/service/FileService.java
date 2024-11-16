@@ -3,6 +3,8 @@ package com.bookingapp.core.service;
 import com.bookingapp.core.client.S3Client;
 import com.bookingapp.core.entity.FileEntity;
 import com.bookingapp.core.repository.FileRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,18 @@ public class FileService {
 
     private final S3Client s3Client;
 
-    public FileEntity getFileEntity(UUID id) {
-        return fileRepository.findById(id).orElseThrow();
+    public FileEntity getFileEntity(@NonNull UUID id) {
+        return fileRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("File with ID '%s' not found".formatted(id)));
     }
 
-    public FileEntity saveFile(FileEntity fileEntity, InputStream fileData) {
+    public FileEntity saveFile(@NonNull FileEntity fileEntity, @NonNull InputStream fileData) {
         String s3reference = s3Client.uploadFile(fileData);
-        fileEntity.setS3reference(s3reference);
+        fileEntity.setObjectName(s3reference);
         return fileRepository.save(fileEntity);
     }
 
-    public InputStream getFile(UUID fileId) {
+    public InputStream getFile(@NonNull UUID fileId) {
         return s3Client.downloadFile(fileId);
     }
 

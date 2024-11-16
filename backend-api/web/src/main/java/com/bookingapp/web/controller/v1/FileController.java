@@ -7,6 +7,7 @@ import com.bookingapp.web.mapper.FileMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -30,7 +31,7 @@ public class FileController {
 
     @Operation(summary = "Загрузить файл описания мероприятия")
     @PostMapping
-    public ResponseEntity<FileDto> upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<FileDto> upload(@NotNull @RequestParam("file") MultipartFile file) throws IOException {
         var fileEntity = new FileEntity();
         fileEntity.setName(file.getOriginalFilename());
         fileEntity.setSize(file.getSize());
@@ -41,7 +42,7 @@ public class FileController {
 
     @Operation(summary = "Скачать файл описания мероприятия")
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> getFile(@Parameter(description = "ID файла") @PathVariable("id") Long fileId) {
+    public ResponseEntity<Resource> getFile(@NotNull @Parameter(description = "ID файла") @PathVariable("id") Long fileId) {
         return ResponseEntity.ok(new ByteArrayResource("1234567890".getBytes()));
     }
 

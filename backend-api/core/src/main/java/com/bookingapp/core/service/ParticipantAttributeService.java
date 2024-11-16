@@ -2,6 +2,7 @@ package com.bookingapp.core.service;
 
 import com.bookingapp.core.entity.ParticipantAttribute;
 import com.bookingapp.core.repository.ParticipantAttributeRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class ParticipantAttributeService {
 
     private final ParticipantAttributeRepository participantAttributeRepository;
 
-    public List<ParticipantAttribute> findEventParticipantAttributes(UUID eventId) {
+    public List<ParticipantAttribute> findEventParticipantAttributes(@NonNull UUID eventId) {
         return participantAttributeRepository.findByEvent_Id(eventId);
     }
 

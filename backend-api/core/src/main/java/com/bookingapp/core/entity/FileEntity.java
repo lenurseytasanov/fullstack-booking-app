@@ -17,8 +17,8 @@ public class FileEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "S3_reference", nullable = false)
-    private String S3reference;
+    @Column(name = "object_name", unique = true, nullable = false)
+    private String objectName;
 
     @Column(name = "name")
     private String name;

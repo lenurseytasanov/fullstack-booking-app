@@ -1,8 +1,9 @@
 package com.bookingapp.core.service;
 
 import com.bookingapp.core.entity.Event;
-import com.bookingapp.core.entity.FileEntity;
 import com.bookingapp.core.repository.EventRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,11 @@ public class EventService {
 
     private final FileService fileService;
 
-    public Event findById(UUID id) {
-        return eventRepository.findById(id).orElseThrow();
+    private static final String EVENT_NOT_FOUND = "Event with ID '%s' not found";
+
+    public Event findById(@NonNull UUID id) {
+        return eventRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(EVENT_NOT_FOUND.formatted(id)));
     }
 
     public List<Event> findAll() {
@@ -27,32 +31,34 @@ public class EventService {
     }
 
     @Transactional
-    public Event createEvent(Event event, List<UUID> fileIds) {
+    public Event createEvent(@NonNull Event event, @NonNull List<UUID> fileIds) {
         Event eventRef = eventRepository.save(event);
-        List<FileEntity> fileEntities = fileIds.stream()
+        fileIds.stream()
                 .map(fileService::getFileEntity)
-                .peek(fileEntity -> fileEntity.setEvent(eventRef))
-                .toList();
-        eventRef.getFileEntities().addAll(fileEntities);
+                .forEach(eventRef::addFile);
         return eventRef;
     }
 
     @Transactional
-    public Event updateEvent(UUID eventId, Event event, List<UUID> fileIds) {
+    public Event updateEvent(@NonNull UUID eventId, @NonNull Event event, @NonNull List<UUID> fileIds) {
         if (!eventRepository.existsById(eventId)) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException(EVENT_NOT_FOUND.formatted(eventId));
         }
-        event.setId(eventId);
-        Event eventRef = eventRepository.save(event);
-        List<FileEntity> fileEntities = fileIds.stream()
+        Event eventRef = eventRepository.findById(eventId).get();
+        eventRef.setName(event.getName());
+        eventRef.setDescription(event.getDescription());
+        eventRef.setAdminName(event.getAdminName());
+        eventRef.setAdminEmail(event.getAdminEmail());
+        fileIds.stream()
                 .map(fileService::getFileEntity)
-                .peek(fileEntity -> fileEntity.setEvent(eventRef))
-                .toList();
-        eventRef.getFileEntities().addAll(fileEntities);
+                .forEach(eventRef::addFile);
         return eventRef;
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(@NonNull UUID id) {
+        if (!eventRepository.existsById(id)) {
+            throw new EntityNotFoundException(EVENT_NOT_FOUND.formatted(id));
+        }
         eventRepository.deleteById(id);
     }
 

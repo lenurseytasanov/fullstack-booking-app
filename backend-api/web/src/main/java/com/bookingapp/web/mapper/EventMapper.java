@@ -3,6 +3,7 @@ package com.bookingapp.web.mapper;
 import com.bookingapp.core.entity.Event;
 import com.bookingapp.core.entity.Meeting;
 import com.bookingapp.core.entity.ParticipantAttribute;
+import com.bookingapp.web.dto.event.EditEventRequest;
 import com.bookingapp.web.dto.event.EventRequest;
 import com.bookingapp.web.dto.event.EventResponse;
 import jakarta.annotation.PostConstruct;
@@ -29,15 +30,17 @@ public class EventMapper {
 
     public Event toEntity(EventRequest dto) {
         Event entity = modelMapper.map(dto, Event.class);
-        entity.getMeetings().addAll(dto.getMeetings().stream()
+        dto.getMeetings().stream()
                 .map(meetingDto -> modelMapper.map(meetingDto, Meeting.class))
-                .peek(meeting -> meeting.setEvent(entity))
-                .toList());
-        entity.getParticipantAttributes().addAll(dto.getFormFields().stream()
+                .forEach(entity::addMeeting);
+        dto.getFormFields().stream()
                 .map(participantAttributeDto -> modelMapper.map(participantAttributeDto, ParticipantAttribute.class))
-                .peek(participantAttribute -> participantAttribute.setEvent(entity))
-                .toList());
+                .forEach(entity::addParticipantAttribute);
         return entity;
+    }
+
+    public Event toEntity(EditEventRequest dto) {
+        return modelMapper.map(dto, Event.class);
     }
 
 }
