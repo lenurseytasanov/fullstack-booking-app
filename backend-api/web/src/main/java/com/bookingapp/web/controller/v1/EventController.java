@@ -5,6 +5,7 @@ import com.bookingapp.core.service.EventService;
 import com.bookingapp.web.dto.event.EditEventRequest;
 import com.bookingapp.web.dto.event.EventRequest;
 import com.bookingapp.web.dto.event.EventResponse;
+import com.bookingapp.web.dto.exception.ErrorDetails;
 import com.bookingapp.web.mapper.EventMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +18,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +38,9 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponse.class)) }),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "Validation error", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @PostMapping
     public ResponseEntity<EventResponse> createEvent(@Valid @RequestBody EventRequest eventRequest) {
@@ -54,9 +54,9 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponse.class)) }),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "Validation error", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @PutMapping("/{id}")
     public ResponseEntity<EventResponse> editEvent(@Parameter(description = "ID мероприятия") @PathVariable("id") UUID eventId,
@@ -70,7 +70,7 @@ public class EventController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@Parameter(description = "ID мероприятия") @PathVariable("id") UUID eventId) {
@@ -83,7 +83,7 @@ public class EventController {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = EventResponse.class)) }),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getEvent(@Parameter(description = "ID мероприятия") @PathVariable("id") UUID eventId) {

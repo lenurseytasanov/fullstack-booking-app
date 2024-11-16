@@ -2,6 +2,7 @@ package com.bookingapp.web.controller.v1;
 
 import com.bookingapp.core.entity.Participant;
 import com.bookingapp.core.service.BookingService;
+import com.bookingapp.web.dto.exception.ErrorDetails;
 import com.bookingapp.web.dto.participant.ParticipantRequest;
 import com.bookingapp.web.dto.participant.ParticipantResponse;
 import com.bookingapp.web.mapper.ParticipantMapper;
@@ -16,7 +17,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,9 +36,9 @@ public class BookingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "Validation error", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @GetMapping("/{id}/participants")
     public ResponseEntity<List<ParticipantResponse>> getParticipants(
@@ -62,13 +62,13 @@ public class BookingController {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ParticipantResponse.class)) }),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "No available places", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "Wrong participant attributes set", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) }),
             @ApiResponse(responseCode = "400", description = "Validation error", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @PostMapping("/{id}/participants")
     public ResponseEntity<ParticipantResponse> signUpForMeeting(

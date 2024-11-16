@@ -2,6 +2,7 @@ package com.bookingapp.web.controller.v1;
 
 import com.bookingapp.core.entity.FileEntity;
 import com.bookingapp.core.service.FileService;
+import com.bookingapp.web.dto.exception.ErrorDetails;
 import com.bookingapp.web.dto.file.FileDto;
 import com.bookingapp.web.mapper.FileMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +17,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +41,7 @@ public class FileController {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = FileDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Validation error", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FileDto> upload(
@@ -58,7 +58,7 @@ public class FileController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class)) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<Resource> getFile(@Parameter(description = "ID файла") @PathVariable("id") UUID fileId) throws IOException {
