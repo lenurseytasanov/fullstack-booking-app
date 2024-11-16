@@ -1,7 +1,7 @@
 package com.bookingapp.web.dto.event;
 
 import com.bookingapp.web.dto.file.FileDto;
-import com.bookingapp.web.dto.meeting.MeetingResponseDto;
+import com.bookingapp.web.dto.meeting.MeetingResponse;
 import com.bookingapp.web.dto.participant.ParticipantAttributeDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventResponseDto {
+public class EventResponse {
 
     @Schema(description = "ID в БД")
     private UUID id;
@@ -37,7 +37,7 @@ public class EventResponseDto {
 
     private List<FileDto> files;
 
-    private List<MeetingResponseDto> meetings;
+    private List<MeetingResponse> meetings;
 
     private List<ParticipantAttributeDto> formFields;
 

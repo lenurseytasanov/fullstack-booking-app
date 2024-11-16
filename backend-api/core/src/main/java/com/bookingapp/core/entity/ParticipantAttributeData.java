@@ -9,11 +9,11 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-public class ParticipantData {
+@Table(name = "PARTICIPANT_ATTRIBUTE_VALUE")
+public class ParticipantAttributeData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "data_id")
     private UUID id;
 
     @ManyToOne
@@ -24,7 +24,7 @@ public class ParticipantData {
     @JoinColumn(name = "attribute_id", nullable = false)
     private ParticipantAttribute attribute;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private String value;
 
 }

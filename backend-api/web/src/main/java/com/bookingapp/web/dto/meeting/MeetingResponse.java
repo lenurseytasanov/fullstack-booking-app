@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MeetingResponseDto {
+public class MeetingResponse {
 
     @Schema(description = "ID в БД")
     private UUID id;

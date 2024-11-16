@@ -5,20 +5,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "MEETING")
 public class Meeting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "available_places")
     private Long availablePlaces;
 
+    @Column(name = "starts_at", nullable = false)
     private OffsetDateTime startsAt;
 
     @ManyToOne
@@ -27,10 +31,10 @@ public class Meeting {
 
     @ManyToMany
     @JoinTable(
-            name = "organizer",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            name = "BOOKING",
+            joinColumns = @JoinColumn(name = "meeting_id"),
+            inverseJoinColumns = @JoinColumn(name = "participant_id")
     )
-    private Set<User> users;
+    private final Set<Participant> participants = new LinkedHashSet<>();
 
 }
