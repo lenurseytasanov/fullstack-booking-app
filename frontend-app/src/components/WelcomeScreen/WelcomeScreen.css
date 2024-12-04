@@ -1,0 +1,178 @@
+.welcome-container {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 100vh;
+	background: linear-gradient(-45deg, #ffffff, #f5f5f5, #fafafa, #ffffff);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	position: relative;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+.bubble {
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(240, 240, 240, 0.3);
+	pointer-events: none;
+	z-index: 1;
+}
+
+.welcome-section {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 930px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 64px 20px;
+}
+
+/* Позиции и размеры пузырей */
+.bubble-1 { width: 100px; height: 100px; left: 10%; top: 20%; animation: float1 20s infinite; }
+.bubble-2 { width: 150px; height: 150px; right: 15%; top: 15%; animation: float2 25s infinite; }
+.bubble-3 { width: 80px; height: 80px; left: 20%; bottom: 20%; animation: float3 15s infinite; }
+.bubble-4 { width: 120px; height: 120px; right: 25%; bottom: 25%; animation: float4 18s infinite; }
+.bubble-5 { width: 90px; height: 90px; left: 40%; top: 10%; animation: float5 22s infinite; }
+.bubble-6 { width: 110px; height: 110px; right: 35%; top: 40%; animation: float6 19s infinite; }
+
+@keyframes float1 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(100px, 100px) rotate(180deg); }
+	100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes float2 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(-150px, 50px) rotate(-180deg); }
+	100% { transform: translate(0, 0) rotate(-360deg); }
+}
+
+@keyframes float3 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(80px, -120px) rotate(180deg); }
+	100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes float4 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(-100px, -80px) rotate(-180deg); }
+	100% { transform: translate(0, 0) rotate(-360deg); }
+}
+
+@keyframes float5 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(120px, -50px) rotate(180deg); }
+	100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes float6 {
+	0% { transform: translate(0, 0) rotate(0deg); }
+	50% { transform: translate(-70px, 130px) rotate(-180deg); }
+	100% { transform: translate(0, 0) rotate(-360deg); }
+}
+
+@keyframes gradient {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+.welcome-heading-style {
+	font: 700 32px/1.2 "Plus Jakarta Sans", sans-serif;
+	color: #1c170d;
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.form-prompt-container {
+	width: 100%;
+	max-width: 519px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form-title-text-style {
+	font: 200 20px "Plus Jakarta Sans", sans-serif;
+	color: #141414;
+	text-align: left;
+	padding-left: 16px;
+	margin-bottom: 16px;
+	width: auto;
+}
+
+.input-container {
+	position: relative;
+	width: 600px;
+	display: flex;
+	align-items: center;
+	background: white;
+	border: 1px solid #dbe0e5;
+	border-radius: 12px;
+	height: 40px;
+}
+
+.form-input {
+	width: 100%;
+	height: 100%;
+	padding: 0 145px 0 16px;
+	border: none;
+	outline: none;
+	font: 400 14px "Plus Jakarta Sans", sans-serif;
+	border-radius: 12px;
+	background: white;
+}
+
+.primary-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	width: 133px;
+	font: 500 14px "Plus Jakarta Sans", sans-serif;
+	color: #141414;
+	cursor: pointer;
+	background: #f0f2f5;
+	border: none;
+	border-left: 1px solid #dbe0e5;
+	border-radius: 0 12px 12px 0;
+}
+
+.welcome-button {
+	width: 359px;
+	height: 40px;
+	margin-top: 60px;
+	font: 700 14px "Plus Jakarta Sans", sans-serif;
+	color: white;
+	cursor: pointer;
+	background: #369eff;
+	border: none;
+	border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+	.welcome-button {
+		 width: 100%;
+		 max-width: 359px;
+		 min-width: auto;
+	}
+}
+
+@media (max-width: 480px) {
+	.input-container {
+		 flex-direction: column;
+		 gap: 10px;
+	}
+
+	.primary-button {
+		 width: 100%;
+		 margin: 10px 0 0 0;
+	}
+}
