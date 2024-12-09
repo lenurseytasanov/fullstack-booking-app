@@ -19,7 +19,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 37px;
-	transform: scale(0.75); 
+	transform: scale(0.75);
 }
 
 .section-title {
@@ -65,7 +65,7 @@
 	padding: 15px;
 	border-radius: 8px;
 	font: 400 16px "Plus Jakarta Sans", sans-serif;
-	border: 1px solid #9EA3AC;
+	border: 1.5px solid #9EA3AC;
 	min-width: 160px;
 	width: 440px;
 	margin-top: -20px;
@@ -94,9 +94,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
- }
- 
- .close-button {
+}
+
+.close-button {
 	position: absolute;
 	top: 20px;
 	right: 25px;
@@ -107,10 +107,10 @@
 	cursor: pointer;
 	padding: 0;
 	z-index: 1;
- }
- 
- .close-button::before,
- .close-button::after {
+}
+
+.close-button::before,
+.close-button::after {
 	content: '';
 	position: absolute;
 	top: 50%;
@@ -118,14 +118,130 @@
 	width: 100%;
 	height: 2px;
 	background-color: #000;
- }
- 
- .close-button::before {
+}
+
+.close-button::before {
 	transform: rotate(45deg);
- }
- 
- .close-button::after {
+}
+
+.close-button::after {
 	transform: rotate(-45deg);
- }
- 
- 
+}
+
+.icon-button {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+}
+
+.icon-button:disabled {
+	cursor: not-allowed;
+}
+
+.icon-button:disabled img {
+	opacity: 0.5;
+}
+
+.icon-button img {
+	width: 24px;
+	height: 24px;
+}
+
+.add-button {
+	margin-left: calc(66.66%);
+}
+
+.new-add-button {
+	margin-left: calc(66.66% + 157px);
+}
+
+
+.add-button img {
+	width: 30px;
+	height: 30px;
+}
+
+.field-input-option {
+	padding: 8px;
+	border-radius: 8px;
+	font: 400 16px "Plus Jakarta Sans", sans-serif;
+	border: 1.5px solid #9EA3AC;
+	min-width: 160px;
+	width: 520px;
+	gap: 29px;
+}
+
+.options-table-container {
+	width: 100%;
+	margin-top: 20px;
+}
+
+.options-table {
+	width: 100%;
+	border: 1.5px solid #9EA3AC;
+	border-radius: 12px;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.options-table td {
+	padding: 15px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.options-table td:first-child,
+.options-table th:first-child {
+	width: 66.66%;
+}
+
+.options-table td:last-child,
+.options-table th:last-child {
+	width: 33.33%;
+}
+
+.options-table th {
+	padding: 15px;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	text-align: center;
+	border-bottom: 1px solid #b5b7ba;
+}
+
+.options-table th:not(:last-child),
+td:first-child,
+td:not(:last-child) {
+	border-right: 1px solid #b5b7ba;
+}
+
+.options-table tr:not(:last-child) td {
+	border-bottom: 1px solid #b5b7ba;
+}
+
+.field-type-item[data-type="advanced"] .options-table td,
+.field-type-item[data-type="advanced"] .options-table th {
+	width: 33.33%;
+}
+
+.field-type-item[data-type="advanced"] .add-button {
+	margin-left: calc(66.66%);
+}
+
+.options-table td,
+.options-table th {
+	width: 33.33%;
+	padding: 15px;
+}
+
+.field-input-option {
+	padding: 8px;
+	border-radius: 8px;
+	font: 400 16px "Plus Jakarta Sans", sans-serif;
+	min-width: 160px;
+	width: 90%;
+	gap: 29px;
+}
