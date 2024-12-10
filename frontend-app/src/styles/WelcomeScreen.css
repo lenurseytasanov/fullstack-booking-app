@@ -15,12 +15,13 @@
 	padding: 0;
 }
 
-.bubble {
-	position: absolute;
-	border-radius: 50%;
-	background: rgba(182, 182, 182, 0.3);
-	pointer-events: none;
-	z-index: 1;
+.field-input:focus,
+.field-input-option:focus,
+.field-textarea:focus {
+  outline: none;
+  border-color: #369eff;
+  box-shadow: 0 0 0 2px rgba(54, 158, 255, 0.2);
+  transition: all 0.2s ease-in-out;
 }
 
 .welcome-section {
@@ -33,14 +34,6 @@
 	align-items: center;
 	padding: 64px 20px;
 }
-
-/* Позиции и размеры пузырей */
-.bubble-1 { width: 100px; height: 100px; left: 10%; top: 20%; animation: float1 20s infinite; }
-.bubble-2 { width: 150px; height: 150px; right: 15%; top: 15%; animation: float2 25s infinite; }
-.bubble-3 { width: 80px; height: 80px; left: 20%; bottom: 20%; animation: float3 15s infinite; }
-.bubble-4 { width: 120px; height: 120px; right: 25%; bottom: 25%; animation: float4 18s infinite; }
-.bubble-5 { width: 90px; height: 90px; left: 40%; top: 10%; animation: float5 22s infinite; }
-.bubble-6 { width: 110px; height: 110px; right: 35%; top: 40%; animation: float6 19s infinite; }
 
 @keyframes float1 {
 	0% { transform: translate(0, 0) rotate(0deg); }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import "../../styles/eventCreate.css";
 import AddFieldPopup from '../AddFieldPopup/AddFieldPopup';
+import "../../styles/eventCreate.css";
 import { Button } from "@mui/base";
 
 const EventCreate = () => {
@@ -10,7 +10,16 @@ const EventCreate = () => {
 	const handleAddField = (field) => {
 		setAdditionalFields([...additionalFields, field]);
 	};
+	const [selectedFiles, setSelectedFiles] = useState([]);
 
+	const handleFileSelect = (event) => {
+		const files = Array.from(event.target.files);
+		setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+	};
+
+	const handleFileRemove = (index) => {
+		setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+	};
 
 
 	return (
@@ -37,16 +46,39 @@ const EventCreate = () => {
 
 				<div className="field-group">
 					<label className="field-label">Описание мероприятия:</label>
-					<input type="text" className="field-input" />
+					<textarea type="text" className="field-input field-textarea" />
 				</div>
-
-				<div className="field-group">
-					<div className="file-upload-container">
-						<label className="field-label">Загрузить файлы:</label>
-						<button type="button" className="upload-button">Выбрать файл</button>
-					</div>
-				</div>
-
+						<div className="field-group">
+							<div className="file-upload-container">
+								<label className="field-label">Загрузить файлы:</label>
+								<input
+									type="file"
+									multiple
+									onChange={handleFileSelect}
+									style={{ display: 'none' }}
+									id="file-upload"
+								/>
+								<label htmlFor="file-upload" className="upload-button">
+									Выбрать файл
+								</label>
+							</div>
+							{selectedFiles.length > 0 && (
+								<div className="selected-files">
+									{selectedFiles.map((file, index) => (
+										<div key={index} className="file-item">
+											<span>{file.name}</span>
+											<button
+												type="button"
+												className="remove-file"
+												onClick={() => handleFileRemove(index)}
+											>
+												✕
+											</button>
+										</div>
+									))}
+								</div>
+							)}
+						</div>
 				<h2 className="event-section-title">Содержимое анкеты</h2>
 
 				<div className="field-group">
