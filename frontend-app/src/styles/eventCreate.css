@@ -1,0 +1,92 @@
+.event-create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px;
+}
+
+.event-create-title {
+  font: 700 32px "Plus Jakarta Sans", sans-serif;
+  margin-bottom: 51px;
+}
+
+.event-section-title {
+  font: 600 24px "Plus Jakarta Sans", sans-serif;
+  align-self: flex-start;
+}
+
+.event-form {
+  width: 968px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.field-label {
+  font: 400 20px "Plus Jakarta Sans", sans-serif;
+  display: flex;
+}
+
+.field-input {
+  padding: 15px;
+  border-radius: 8px;
+  font: 400 16px "Plus Jakarta Sans", sans-serif;
+  border: 1px solid #9EA3AC;
+  width: 440px;
+  margin-top: 0px;
+}
+
+.file-upload-container {
+ display: flex;
+  gap: 16px;
+}
+
+.upload-button {
+  width: 218px;
+  height: 32px;
+  background: #F0F2F5;
+  border: 1px solid #DBE0E5;
+  border-radius: 12px;
+  font: 400 14px "Plus Jakarta Sans", sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.options-table-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.options-table {
+  width: 100%;
+  border: 1.5px solid #9EA3AC;
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.options-table td,
+.options-table th {
+  padding: 15px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.options-table th {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid #b5b7ba;
+}
+
+.options-table tr:not(:last-child) td {
+  border-bottom: 1px solid #b5b7ba;
+}

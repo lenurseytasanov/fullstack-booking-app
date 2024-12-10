@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@mui/base";
 import { useState } from 'react';
-import './WelcomeScreen.css';
-import AddFieldPopup from '../AddFieldPopup/AddFieldPopup';
+import '../../styles/WelcomeScreen.css';
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
@@ -15,7 +14,6 @@ export default function WelcomeScreen() {
   const handleFormCodeSubmit = () => {
     navigate(`/form/${formCode}`);
   };
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
 	<div className="welcome-container">
@@ -46,13 +44,6 @@ export default function WelcomeScreen() {
         <Button className="welcome-button" onClick={handleCreateForm}>
           Создать новую анкету
         </Button>
-		  <button onClick={() => setIsPopupOpen(true)}>Открыть попап</button>
-        {isPopupOpen && (
-          <AddFieldPopup 
-            isOpen={isPopupOpen} 
-            onClose={() => setIsPopupOpen(false)} 
-          />
-        )}
       </div>
     </div>
   );
