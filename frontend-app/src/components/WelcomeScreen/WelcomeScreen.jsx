@@ -17,12 +17,6 @@ export default function WelcomeScreen() {
 
   return (
 	<div className="welcome-container">
-    <div className="bubble bubble-1"></div>
-    <div className="bubble bubble-2"></div>
-    <div className="bubble bubble-3"></div>
-    <div className="bubble bubble-4"></div>
-    <div className="bubble bubble-5"></div>
-    <div className="bubble bubble-6"></div>
       <div className="welcome-section">
         <p className="welcome-heading-style">Добро пожаловать!</p>
         <div className="form-prompt-container">
