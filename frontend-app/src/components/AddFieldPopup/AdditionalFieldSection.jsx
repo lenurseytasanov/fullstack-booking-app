@@ -1,46 +1,52 @@
-import { useState } from "react";
-import "./addFieldPopup.css";
+import "../../styles/addFieldPopup.css";
+import { fieldTypes, UseFieldState } from "./UseFieldState.jsx";
 
 export default function AdditionalFieldSection() {
-	const [activeType, setActiveType] = useState("text");
-	const [options, setOptions] = useState(['']);
-
-	const fieldTypes = [
-		{ id: "text", label: "Текстовое поле" },
-		{ id: "multiple", label: "Множественный выбор" },
-		{ id: "advanced", label: "Расширенная настройка" },
-	];
-
-	const addOption = () => {
-		setOptions([...options, '']);
-	};
-
-	const removeOption = (index) => {
-		const newOptions = options.filter((_, i) => i !== index);
-		setOptions(newOptions);
-	};
-
-	const handleOptionChange = (index, value) => {
-		const newOptions = [...options];
-		newOptions[index] = value;
-		setOptions(newOptions);
-	};
-	
+	const {
+		activeType,
+		setActiveType,
+		textFieldName,
+		setTextFieldName,
+		multipleFieldName,
+		setMultipleFieldName,
+		multipleOptions,
+		advancedFieldName,
+		setAdvancedFieldName,
+		advancedOptions,
+		handleMultipleOptionAdd,
+		handleMultipleOptionRemove,
+		handleMultipleOptionChange,
+		handleAdvancedOptionAdd,
+		handleAdvancedOptionRemove,
+		handleAdvancedOptionChange
+	} = UseFieldState();
 
 	const renderFieldContent = () => {
+
 		switch (activeType) {
 			case "text":
 				return (
 					<div className="field-form">
 						<label className="field-label">Название поля:</label>
-						<input type="text" className="field-input" />
+						<input
+							type="text"
+							className="field-input"
+							value={textFieldName}
+							onChange={(e) => setTextFieldName(e.target.value)}
+						/>
 					</div>
 				);
+
 			case "multiple":
 				return (
 					<div className="field-form">
 						<label className="field-label">Название поля:</label>
-						<input type="text" className="field-input" />
+						<input
+							type="text"
+							className="field-input"
+							value={multipleFieldName}
+							onChange={(e) => setMultipleFieldName(e.target.value)}
+						/>
 
 						<div className="options-table-container">
 							<table className="options-table">
@@ -51,26 +57,26 @@ export default function AdditionalFieldSection() {
 									</tr>
 								</thead>
 								<tbody>
-									{options.map((option, index) => (
+									{multipleOptions.map((option, index) => (
 										<tr key={index}>
 											<td>
 												<input
 													type="text"
 													value={option}
-													onChange={(e) => handleOptionChange(index, e.target.value)}
+													onChange={(e) => handleMultipleOptionChange(index, e.target.value)}
 													className="field-input-option"
 												/>
 											</td>
 											<td>
 												<button
 													className="icon-button"
-													onClick={() => removeOption(index)}
-													disabled={options.length === 1}
+													onClick={() => handleMultipleOptionRemove(index)}
+													disabled={multipleOptions.length === 1}
 												>
 													<img
 														src="/delete.svg"
 														alt="Delete"
-														style={{ opacity: options.length === 1 ? '0.5' : '1' }}
+														style={{ opacity: multipleOptions.length === 1 ? '0.5' : '1' }}
 													/>
 												</button>
 											</td>
@@ -79,68 +85,88 @@ export default function AdditionalFieldSection() {
 								</tbody>
 							</table>
 						</div>
-						<button className="icon-button add-button" onClick={addOption}>
+						<button
+							type="button"
+							className="icon-button add-button"
+							onClick={(e) => {
+								e.preventDefault();
+								handleMultipleOptionAdd();
+							}}
+						>
 							<img src="/add.svg" alt="Add" />
 						</button>
 					</div>
 				);
-				case "advanced":
-					return (
-					  <div className="field-form">
-						 <label className="field-label">Название поля:</label>
-						 <input type="text" className="field-input" />
-						 
-						 <div className="options-table-container">
+
+			case "advanced":
+				return (
+					<div className="field-form">
+						<label className="field-label">Название поля:</label>
+						<input
+							type="text"
+							className="field-input"
+							value={advancedFieldName}
+							onChange={(e) => setAdvancedFieldName(e.target.value)}
+						/>
+
+						<div className="options-table-container">
 							<table className="options-table">
-							  <thead>
-								 <tr>
-									<th>Варианты ответа</th>
-									<th>Количество</th>
-									<th>Редактирование</th>
-								 </tr>
-							  </thead>
-							  <tbody>
-								 {options.map((option, index) => (
-									<tr key={index}>
-									  <td>
-										 <input
-											type="text"
-											value={option}
-											onChange={(e) => handleOptionChange(index, e.target.value)}
-											className="field-input-option"
-										 />
-									  </td>
-									  <td>
-										 <input
-											type="text"
-											value={option}
-											onChange={(e) => handleOptionChange(index, e.target.value)}
-											className="field-input-option"
-										 />
-									  </td>
-									  <td>
-										 <button 
-											className="icon-button" 
-											onClick={() => removeOption(index)}
-											disabled={options.length === 1}
-										 >
-											<img 
-											  src="/delete.svg" 
-											  alt="Delete" 
-											  style={{ opacity: options.length === 1 ? '0.5' : '1' }}
-											/>
-										 </button>
-									  </td>
+								<thead>
+									<tr>
+										<th>Варианты ответа</th>
+										<th>Количество</th>
+										<th>Редактирование</th>
 									</tr>
-								 ))}
-							  </tbody>
+								</thead>
+								<tbody>
+									{advancedOptions.map((option, index) => (
+										<tr key={index}>
+											<td>
+												<input
+													type="text"
+													value={option.answer}
+													onChange={(e) => handleAdvancedOptionChange(index, 'answer', e.target.value)}
+													className="field-input-option"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													value={option.quantity}
+													onChange={(e) => handleAdvancedOptionChange(index, 'quantity', e.target.value)}
+													className="field-input-option"
+												/>
+											</td>
+											<td>
+												<button
+													className="icon-button"
+													onClick={() => handleAdvancedOptionRemove(index)}
+													disabled={advancedOptions.length === 1}
+												>
+													<img
+														src="/delete.svg"
+														alt="Delete"
+														style={{ opacity: advancedOptions.length === 1 ? '0.5' : '1' }}
+													/>
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
 							</table>
-						 </div>
-						 <button className="icon-button add-button " onClick={addOption}>
+						</div>
+						<button
+							type="button" 
+							className="icon-button add-button new-add-button"
+							onClick={(e) => {
+								e.preventDefault(); 
+								handleAdvancedOptionAdd();
+							}}
+						>
 							<img src="/add.svg" alt="Add" />
-						 </button>
-					  </div>
-					);
+						</button>
+					</div>
+				);
 			default:
 				return null;
 		}
@@ -154,6 +180,7 @@ export default function AdditionalFieldSection() {
 						key={type.id}
 						className={`field-type-item ${activeType === type.id ? "active" : ""}`}
 						onClick={() => setActiveType(type.id)}
+						data-type={type.id}
 					>
 						{type.label}
 					</li>

@@ -1,7 +1,7 @@
 import { Button } from "@mui/base";
 import { useEffect, useCallback } from "react";
 import AdditionalFieldSection from "./AdditionalFieldSection";
-import "./addFieldPopup.css";
+import "../../styles/addFieldPopup.css";
 
 export default function AddFieldPopup({ onClose }) {
   const handleEscapeKey = useCallback((event) => {
