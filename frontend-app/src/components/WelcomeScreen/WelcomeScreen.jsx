@@ -12,7 +12,7 @@ export default function WelcomeScreen() {
   };
 
   const handleFormCodeSubmit = () => {
-    navigate(`/form/${formCode}`);
+    navigate(`/register/${formCode}`);
   };
 
   return (

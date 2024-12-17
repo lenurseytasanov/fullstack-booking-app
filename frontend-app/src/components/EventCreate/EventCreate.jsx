@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AddFieldPopup from '../AddFieldPopup/AddFieldPopup';
-import "../../styles/eventCreate.css";
 import { Button } from "@mui/base";
+import "../../styles/eventCreate.css";
 
 const EventCreate = () => {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -11,6 +11,76 @@ const EventCreate = () => {
 		setAdditionalFields([...additionalFields, field]);
 	};
 	const [selectedFiles, setSelectedFiles] = useState([]);
+
+	const renderField = (field, index) => {
+		return (
+		  <div className="field-group" key={index}>
+			 <label className="field-label">{field.label}</label>
+			 {field.type === "text" && (
+				<input type="text" className="field-input user-input" readOnly/>
+			 )}
+			 {field.type === "multiple" && (
+				<div className="options-table-container form-table-container">
+				  <table className="options-table user-table">
+					 <thead>
+						<tr>
+						  <th>Варианты ответа</th>
+						</tr>
+					 </thead>
+					 <tbody>
+						{field.options.map((option, i) => (
+						  <tr key={i}>
+							 <td>
+								<input
+								  type="text"
+								  value={option}
+								  readOnly
+								  className="field-input-option user-input"
+								/>
+							 </td>
+						  </tr>
+						))}
+					 </tbody>
+				  </table>
+				</div>
+			 )}
+			 {field.type === "advanced" && (
+				<div className="options-table-container form-table-container">
+				  <table className="options-table ">
+					 <thead>
+						<tr>
+						  <th>Варианты ответа</th>
+						  <th>Количество</th>
+						</tr>
+					 </thead>
+					 <tbody>
+						{field.options.map((option, i) => (
+						  <tr key={i}>
+							 <td>
+								<input
+								  type="text"
+								  value={option.answer}
+								  readOnly
+								  className="field-input-option user-input"
+								/>
+							 </td>
+							 <td>
+								<input
+								  type="text"
+								  value={option.quantity}
+								  readOnly
+								  className="field-input-option user-input"
+								/>
+							 </td>
+						  </tr>
+						))}
+					 </tbody>
+				  </table>
+				</div>
+			 )}
+		  </div>
+		);
+	 };
 
 	const handleFileSelect = (event) => {
 		const files = Array.from(event.target.files);
@@ -36,7 +106,11 @@ const EventCreate = () => {
 
 				<div className="field-group">
 					<label className="field-label">Ваш E-mail:</label>
-					<input type="email" className="field-input" />
+					<input
+						type="email"
+						className="field-input"
+						required
+					/>
 				</div>
 
 				<div className="field-group">
@@ -48,55 +122,55 @@ const EventCreate = () => {
 					<label className="field-label">Описание мероприятия:</label>
 					<textarea type="text" className="field-input field-textarea" />
 				</div>
-						<div className="field-group">
-							<div className="file-upload-container">
-								<label className="field-label">Загрузить файлы:</label>
-								<input
-									type="file"
-									multiple
-									onChange={handleFileSelect}
-									style={{ display: 'none' }}
-									id="file-upload"
-								/>
-								<label htmlFor="file-upload" className="upload-button">
-									Выбрать файл
-								</label>
-							</div>
-							{selectedFiles.length > 0 && (
-								<div className="selected-files">
-									{selectedFiles.map((file, index) => (
-										<div key={index} className="file-item">
-											<span>{file.name}</span>
-											<button
-												type="button"
-												className="remove-file"
-												onClick={() => handleFileRemove(index)}
-											>
-												✕
-											</button>
-										</div>
-									))}
+				<div className="field-group">
+					<div className="file-upload-container">
+						<label className="field-label">Загрузить файлы:</label>
+						<input
+							type="file"
+							multiple
+							onChange={handleFileSelect}
+							style={{ display: 'none' }}
+							id="file-upload"
+						/>
+						<label htmlFor="file-upload" className="upload-button">
+							Выбрать файл
+						</label>
+					</div>
+					{selectedFiles.length > 0 && (
+						<div className="selected-files">
+							{selectedFiles.map((file, index) => (
+								<div key={index} className="file-item">
+									<span>{file.name}</span>
+									<button
+										type="button"
+										className="remove-file"
+										onClick={() => handleFileRemove(index)}
+									>
+										✕
+									</button>
 								</div>
-							)}
+							))}
 						</div>
+					)}
+				</div>
 				<h2 className="event-section-title">Содержимое анкеты</h2>
 
 				<div className="field-group">
 					<label className="field-label">ФИО</label>
-					<input type="text" className="field-input" />
+					<input type="text" className="field-input user-input" readOnly/>
 				</div>
 
 				<div className="field-group">
 					<label className="field-label">E-mail:</label>
-					<input type="text" className="field-input" />
+					<input type="text" className="field-input user-input" readOnly/>
 				</div>
 
 				<div className="field-group">
 					<label className="field-label">Номер телефона:</label>
-					<input type="text" className="field-input" />
+					<input type="text" className="field-input user-input" readOnly/>
 				</div>
 
-				{/* {additionalFields.map((field, index) => renderField(field, index))} */}
+				{additionalFields.map((field, index) => renderField(field, index))}
 
 				<button
 					type="button"
@@ -112,7 +186,7 @@ const EventCreate = () => {
 						onAddField={handleAddField}
 					/>
 				)}
-				<Button className="add-field-button" onClick={handleAddField}>
+				<Button className="add-field-button">
 					Создать анкету
 				</Button>
 			</form>

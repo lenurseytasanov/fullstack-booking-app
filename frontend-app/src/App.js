@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WelcomeScreen from './components/WelcomeScreen/WelcomeScreen';
 import EventCreate from './components/EventCreate/EventCreate';
-import EventRegister from './components/EventRegister';
-import EventDetails from './components/EventDetails';
+import EventRegister from './components/EventRegister/EventRegister';
+import EventResult from './components/EventResult/EventResult';
 
 function App() {
   return (
@@ -16,11 +16,11 @@ function App() {
           {/* Экран создания новой анкеты */}
           <Route path="/create" element={<EventCreate />} />
           
-          {/* Экран с существующей анкетой по коду */}
-          <Route path="/form/:formId" element={<EventDetails />} />
+          {/* Экран с результатом записи участников */}
+          <Route path="/form/:formId" element={<EventResult />} />
           
           {/* Экран регистрации на мероприятие */}
-          <Route path="/register" element={<EventRegister />} />
+          <Route path="/register/:formId" element={<EventRegister />} />
         </Routes>
       </div>
     </Router>
