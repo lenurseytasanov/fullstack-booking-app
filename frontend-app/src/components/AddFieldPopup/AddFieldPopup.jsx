@@ -1,7 +1,7 @@
 import { Button } from "@mui/base";
 import { useEffect, useCallback } from "react";
 import { fieldTypes, UseFieldState } from "./UseFieldState.jsx";
-import "../../styles/addFieldPopup.css";
+import "./addFieldPopup.scss";
 
 export default function AddFieldPopup({ onClose, onAddField }) {
 	const {
