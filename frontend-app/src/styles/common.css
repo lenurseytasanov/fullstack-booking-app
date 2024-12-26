@@ -22,16 +22,7 @@
 	z-index: 1;
 	pointer-events: none;
 	touch-action: none;
- }
- 
- body {
-	margin: 0;
-	padding: 0;
-	background-color: #EEE;
-	font-family: "Open Sans", sans-serif;
-	box-sizing: border-box;
-	cursor: default;
- }
+}
 
 .bubble {
 	position: absolute;

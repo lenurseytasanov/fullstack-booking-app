@@ -1,0 +1,81 @@
+.field-addition-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+ }
+ 
+ .field-addition-section {
+	background: white;
+	border-radius: 30px;
+	padding: 52px;
+	width: 968px;
+	display: flex;
+	flex-direction: column;
+	gap: 37px;
+	transform: scale(0.75);
+ }
+ 
+ .section-title {
+	font: 700 32px "Plus Jakarta Sans", sans-serif;
+	text-align: center;
+ }
+ 
+ .close-button {
+	position: absolute;
+	top: 20px;
+	right: 25px;
+	width: 24px;
+	height: 24px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	z-index: 1;
+ }
+ 
+ .close-button::before,
+ .close-button::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background-color: #000;
+ }
+ 
+ .close-button::before {
+	transform: rotate(45deg);
+ }
+ 
+ .close-button::after {
+	transform: rotate(-45deg);
+ }
+ 
+ .field-form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	font: 400 16px "Plus Jakarta Sans", sans-serif;
+ }
+ 
+ .add-field-button {
+	margin-top: 20px;
+	align-self: center;
+	width: 214px;
+	height: 40px;
+	font: 700 14px "Plus Jakarta Sans", sans-serif;
+	color: white;
+	cursor: pointer;
+	background: #369eff;
+	border: none;
+	border-radius: 20px;
+ }
+ 
