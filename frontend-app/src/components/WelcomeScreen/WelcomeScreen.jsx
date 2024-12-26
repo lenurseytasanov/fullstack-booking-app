@@ -1,23 +1,38 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@mui/base";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import LinksPopup from '../LinksPopup/LinksPopup';
 import './welcomeScreen.scss';
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
   const [formCode, setFormCode] = useState('');
   const { eventId } = useParams();
+  const [showLinksPopup, setShowLinksPopup] = useState(false);
+  const [links, setLinks] = useState(null);
+
+  useEffect(() => {
+    const shouldShowPopup = localStorage.getItem('showLinksPopup');
+    if (shouldShowPopup === 'true') {
+      const popupLinks = JSON.parse(localStorage.getItem('popupLinks'));
+      setLinks(popupLinks);
+      setShowLinksPopup(true);
+      localStorage.removeItem('showLinksPopup');
+      localStorage.removeItem('popupLinks');
+    }
+  }, []);
   const handleCreateForm = () => {
     navigate('/create');
   };
 
-  const handleFormCodeSubmit = (code) => {
+  const handleFormCodeSubmit = () => {
 	const events = JSON.parse(localStorage.getItem('events') || '[]');
-	const event = events.find(e => e.id === parseInt(eventId));
+	const event = events.find(e => e.id === parseInt(formCode));
+	
 	if (event) {
-	  navigate(`/register/${eventId}`);
+	  navigate(`/register/${formCode}`);
 	} else {
-	  alert('Мероприятие не найдено');
+	  alert('Мероприятие не найдено!');
 	}
  };
 
@@ -46,6 +61,12 @@ export default function WelcomeScreen() {
           Создать новую анкету
         </Button>
       </div>
+		{showLinksPopup && (
+        <LinksPopup 
+          links={links}
+          onClose={() => setShowLinksPopup(false)}
+        />
+      )}
     </div>
   );
 }

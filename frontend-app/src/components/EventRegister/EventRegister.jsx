@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Button } from "@mui/base";
+import './eventRegister.scss'
 
 const EventRegister = () => {
     const { eventId } = useParams();
