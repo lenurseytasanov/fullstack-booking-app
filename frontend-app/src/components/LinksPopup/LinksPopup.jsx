@@ -1,5 +1,6 @@
-import { useEffect, useCallback } from "react";
 import "./linksPopup.scss";
+import React, { useEffect, useCallback } from "react";
+import LinksForm from "../LinkForm/LinkForm";
 
 export default function LinksPopup({ onClose, links }) {
   const handleEscapeKey = useCallback((event) => {
@@ -25,11 +26,20 @@ export default function LinksPopup({ onClose, links }) {
     <div className="field-addition-container" onClick={handleOutsideClick}>
       <div className="field-addition-section">
         <button className="close-button" onClick={onClose} />
-        <h2 className="section-title">Ссылки на мероприятие</h2>
+        <h2 className="section-title">Мероприятие успешно создано!</h2>
         <div className="field-form">
-          <p>Ссылка для регистрации: http://localhost:3000{links.register}</p>
-          <p>Код анкеты: {links.code}</p>
-          <p>Ссылка на результаты: http://localhost:3000{links.results}</p>
+          <div className="links-group">
+            <p>Ссылка для регистрации:</p>
+            <LinksForm value={`http://localhost:3000${links.register}`} />
+          </div>
+          <div className="links-group">
+            <p>Код:</p>
+            <LinksForm value={links.code} />
+          </div>
+          <div className="links-group">
+            <p>Ссылка на результаты:</p>
+            <LinksForm value={`http://localhost:3000${links.results}`} />
+          </div>
         </div>
       </div>
     </div>
