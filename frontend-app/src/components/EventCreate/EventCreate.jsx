@@ -15,8 +15,9 @@ const EventCreate = () => {
 		name: '',
 		email: '',
 		eventTitle: '',
-		description: ''
-	});
+		description: '',
+		participantCount: ''
+	 });
 	const [generatedLinks, setGeneratedLinks] = useState(null);
 
 	const handleInputChange = (e) => {
@@ -185,8 +186,8 @@ const EventCreate = () => {
 					<div className="field-group">
 						<label className="field-label">Количество участников:</label>
 						<input
-							type="text"
-							name="eventTitle"
+							type="number"
+							name="participantCount"
 							value={formData.participantCount}
 							onChange={handleInputChange}
 							className="field-input"
