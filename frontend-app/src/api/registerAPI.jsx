@@ -1,30 +1,12 @@
 import axios from 'axios';
 
+const BASE_URL = '/api/v1';
+
 const registerAPI = {
-  getRegisters: async () => {
-    const response = await axios.get('/api/registers');
+  signUpForMeeting: async (eventId, data) => {
+    const response = await axios.post(`${BASE_URL}/events/${eventId}/participants`, data);
     return response.data;
-  },
-
-  getRegister: async (id) => {
-    const response = await axios.get(`/api/registers/${id}`);
-    return response.data;
-  },
-
-  createRegister: async (data) => {
-    const response = await axios.post('/api/registers', data);
-    return response.data;
-  },
-
-  updateRegister: async (id, data) => {
-    const response = await axios.put(`/api/registers/${id}`, data);
-    return response.data;
-  },
-
-  deleteRegister: async (id) => {
-    const response = await axios.delete(`/api/registers/${id}`);
-    return response.data;
-  },
+  }
 };
 
 export default registerAPI;

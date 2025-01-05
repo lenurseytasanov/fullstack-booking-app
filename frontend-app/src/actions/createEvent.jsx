@@ -1,29 +1,29 @@
-import { GET_EVENTS, CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from './types';
+import { GET_EVENTS, CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT, LOADING, ERROR } from './types';
 
-export const getEvents = () => {
-  return {
-    type: GET_EVENTS,
-    payload: {},
-  };
-};
+export const getEvents = () => ({
+  type: GET_EVENTS
+});
 
-export const createEvent = (data) => {
-  return {
-    type: CREATE_EVENT,
-    payload: data,
-  };
-};
+export const createEvent = (eventData) => ({
+  type: CREATE_EVENT,
+  payload: eventData
+});
 
-export const updateEvent = (id, data) => {
-  return {
-    type: UPDATE_EVENT,
-    payload: { id, data },
-  };
-};
+export const updateEvent = (id, eventData) => ({
+  type: UPDATE_EVENT,
+  payload: { id, data: eventData }
+});
 
-export const deleteEvent = (id) => {
-  return {
-    type: DELETE_EVENT,
-    payload: { id },
-  };
-};
+export const deleteEvent = (id) => ({
+  type: DELETE_EVENT,
+  payload: id
+});
+
+export const setLoading = () => ({
+  type: LOADING
+});
+
+export const setError = (error) => ({
+  type: ERROR,
+  payload: error
+});
