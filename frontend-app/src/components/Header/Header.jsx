@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './header.scss';
 
-const Header = ({ title = {parent: "Навигация", name: "Создание анкеты"} }) => {
+const Header = ({ title = { parent: "Навигация", name: "Создание анкеты" } }) => {
 	return (
-	  <>
-		 <div id="blurry-filter"></div>
-		 <header>
-			<div>
-			  <article id="title">
-				 <span className="parent">{title.parent}</span>
-				 <br />
-				 <span className="name">{title.name}</span>
+		<>
+			<div id="blurry-filter"></div>
+			<header>
+				<div>
+					<article id="title">
+						<span className="parent">{title.parent}</span>
+						<br />
+						<span className="name">{title.name}</span>
 					</article>
 					<article id="reference">
 						<nav className="nav">
