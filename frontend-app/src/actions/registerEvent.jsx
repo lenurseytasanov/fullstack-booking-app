@@ -1,29 +1,15 @@
-import { GET_REGISTERS, CREATE_REGISTER, UPDATE_REGISTER, DELETE_REGISTER } from './types';
+import { CREATE_PARTICIPANT, LOADING, ERROR } from './types';
 
-export const getRegisters = () => {
-  return {
-    type: GET_REGISTERS,
-    payload: {},
-  };
-};
+export const registerParticipant = (eventId, participantData) => ({
+  type: CREATE_PARTICIPANT,
+  payload: { eventId, data: participantData }
+});
 
-export const createRegister = (data) => {
-  return {
-    type: CREATE_REGISTER,
-    payload: data,
-  };
-};
+export const setLoading = () => ({
+  type: LOADING
+});
 
-export const updateRegister = (id, data) => {
-  return {
-    type: UPDATE_REGISTER,
-    payload: { id, data },
-  };
-};
-
-export const deleteRegister = (id) => {
-  return {
-    type: DELETE_REGISTER,
-    payload: { id },
-  };
-};
+export const setError = (error) => ({
+  type: ERROR,
+  payload: error
+});
