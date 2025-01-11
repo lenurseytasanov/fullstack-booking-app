@@ -6,21 +6,17 @@ import "./addFieldPopup.scss";
 export default function AddFieldPopup({ onClose, onAddField }) {
 	const {
 		activeType,
-		setActiveType,
-		textFieldName,
-		setTextFieldName,
-		multipleFieldName,
-		setMultipleFieldName,
-		multipleOptions,
-		advancedFieldName,
-		setAdvancedFieldName,
-		advancedOptions,
-		handleMultipleOptionAdd,
-		handleMultipleOptionRemove,
-		handleMultipleOptionChange,
-		handleAdvancedOptionAdd,
-		handleAdvancedOptionRemove,
-		handleAdvancedOptionChange
+	  setActiveType,
+	  textFieldName,
+	  setTextFieldName,
+	  multipleFieldName,
+	  setMultipleFieldName,
+	  multipleOptions,
+	  textareaFieldName,
+	  setTextareaFieldName,
+	  handleMultipleOptionAdd,
+	  handleMultipleOptionRemove,
+	  handleMultipleOptionChange
 	} = UseFieldState();
 
 	const handleEscapeKey = useCallback((event) => {
@@ -59,13 +55,15 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 					options: multipleOptions
 				};
 				break;
-			case "advanced":
+			case "textarea":
 				fieldData = {
-					type: "advanced",
-					label: advancedFieldName,
-					options: advancedOptions
+					type: "textarea",
+					label: `${textareaFieldName}/////textarea`,
+					value: ""
 				};
 				break;
+			default:
+				return null;
 		}
 		onAddField(fieldData);
 		onClose();
@@ -87,6 +85,7 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 						/>
 					</div>
 				);
+
 
 			case "multiple":
 				return (
@@ -149,73 +148,16 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 					</div>
 				);
 
-			case "advanced":
+			case "textarea":
 				return (
 					<div className="field-form">
 						<label className="field-label">Название поля:</label>
 						<input
 							type="text"
 							className="field-input"
-							value={advancedFieldName}
-							onChange={(e) => setAdvancedFieldName(e.target.value)}
+							value={textareaFieldName}
+							onChange={(e) => setTextareaFieldName(e.target.value)}
 						/>
-
-						<div className="options-table-container">
-							<table className="options-table">
-								<thead>
-									<tr>
-										<th>Варианты ответа</th>
-										<th>Количество</th>
-										<th>Редактирование</th>
-									</tr>
-								</thead>
-								<tbody>
-									{advancedOptions.map((option, index) => (
-										<tr key={index}>
-											<td>
-												<input
-													type="text"
-													value={option.answer}
-													onChange={(e) => handleAdvancedOptionChange(index, 'answer', e.target.value)}
-													className="field-input-option"
-												/>
-											</td>
-											<td>
-												<input
-													type="text"
-													value={option.quantity}
-													onChange={(e) => handleAdvancedOptionChange(index, 'quantity', e.target.value)}
-													className="field-input-option"
-												/>
-											</td>
-											<td>
-												<button
-													className="icon-button"
-													onClick={() => handleAdvancedOptionRemove(index)}
-													disabled={advancedOptions.length === 1}
-												>
-													<img
-														src="/delete.svg"
-														alt="Delete"
-														style={{ opacity: advancedOptions.length === 1 ? '0.5' : '1' }}
-													/>
-												</button>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-						<button
-							type="button"
-							className="icon-button add-button new-add-button"
-							onClick={(e) => {
-								e.preventDefault();
-								handleAdvancedOptionAdd();
-							}}
-						>
-							<img src="/add.svg" alt="Add" />
-						</button>
 					</div>
 				);
 			default:

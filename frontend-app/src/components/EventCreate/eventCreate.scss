@@ -158,6 +158,29 @@
 	line-height: 1.5;
 }
 
+.field-input[type="date"],
+.field-input[type="time"] {
+  appearance: none;
+  padding: 15px;
+  width: 440px;
+  
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .field-input[type="date"],
+  .field-input[type="time"] {
+    width: 100%;
+  }
+}
+
 @media (max-width: 1024px) {
 	.field-textarea {
 		width: 100%;

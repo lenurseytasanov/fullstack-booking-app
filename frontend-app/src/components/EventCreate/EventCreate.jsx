@@ -17,8 +17,10 @@ const EventCreate = () => {
 		email: '',
 		eventTitle: '',
 		description: '',
-		participantCount: ''
-	 });
+		participantCount: '',
+		eventDate: '',
+		eventTime: ''
+	});
 	const [generatedLinks, setGeneratedLinks] = useState(null);
 
 	const handleInputChange = (e) => {
@@ -42,117 +44,115 @@ const EventCreate = () => {
 		setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-	
-		const eventData = {
-			adminName: formData.name,
-			adminEmail: formData.email,
-			name: formData.eventTitle,
-			description: formData.description,
-			files: [], // Здесь должны быть ID файлов
-			meetings: [
-				{
-					availablePlaces: parseInt(formData.participantCount),
-					startsAt: new Date().toISOString()
-				}
-			],
-			formFields: additionalFields.map(field => ({
-				name: field.label,
-				required: true
-			}))
-		};
-
+	const handleFileUpload = async (file) => {
 		try {
-			const response = await api.post('/api/v1/events', eventData);
-			const newEventId = response.data.id;
-			const links = {
-				register: `/register/${newEventId}`,
-				results: `/results/${newEventId}`,
-				code: newEventId
-			};
-
-			localStorage.setItem('showLinksPopup', 'true');
-			localStorage.setItem('popupLinks', JSON.stringify(links));
-		
-			navigate('/');
+		  const response = await api.post('/api/v1/files', file, {
+			  headers: {
+				  'Content-Type': 'multipart/form-data',
+				  'Accept': 'application/json'
+			  }
+		  });
+		  
+		  return response.data.fileId;
 		} catch (error) {
-			console.error('Ошибка при создании мероприятия:', error);
-			alert('Не удалось создать мероприятие');
+		  console.error('Детали ошибки загрузки:', {
+			  status: error.response?.status,
+			  data: error.response?.data
+		  });
+		  return null;
 		}
-	};
+	 };
+	 
+	 const handleSubmit = async (e) => {
+		e.preventDefault();
+		
+		const uploadedFiles = await Promise.all(
+		  selectedFiles.map(file => handleFileUpload(file))
+		);
+	 
+		const eventDateTime = new Date(`${formData.eventDate}T${formData.eventTime}`);
+	 
+		const eventData = {
+		  adminName: formData.name,
+		  adminEmail: formData.email,
+		  name: formData.eventTitle,
+		  description: formData.description,
+		  files: uploadedFiles.filter(file => file !== null).map(file => file.fileId),
+		  meetings: [
+			 {
+				availablePlaces: parseInt(formData.participantCount),
+				startsAt: eventDateTime.toISOString()
+			 }
+		  ],
+		  formFields: additionalFields.map(field => ({
+			 name: field.type === 'multiple' ? 
+				`${field.label}/////${field.options.join('/////')}` : 
+				field.type === 'textarea' ?
+				`${field.label}/////textarea` :
+				field.label,
+			 required: true
+		  }))
+		};
+	 
+	 
+		try {
+		  const response = await api.post('/api/v1/events', eventData);
+		  const newEventId = response.data.id;
+		  const links = {
+			 register: `/register/${newEventId}`,
+			 results: `/results/${newEventId}`,
+			 code: newEventId
+		  };
+	 
+		  localStorage.setItem('showLinksPopup', 'true');
+		  localStorage.setItem('popupLinks', JSON.stringify(links));
+		
+		  navigate('/');
+		} catch (error) {
+		  console.error('Ошибка при создании мероприятия:', error);
+		  console.log('Ответ сервера:', error.response?.data);
+		  alert('Не удалось создать мероприятие');
+		}
+	 };
 	 
 
-	const renderField = (field, index) => {
-		return (
-			<div className="field-group" key={index}>
-				<label className="field-label">{field.label}</label>
-				{field.type === "text" && (
-					<input type="text" className="field-input user-input" readOnly />
-				)}
-				{field.type === "multiple" && (
-					<div className="options-table-container form-table-container">
-						<table className="options-table user-table">
-							<thead>
-								<tr>
-									<th>Варианты ответа</th>
-								</tr>
-							</thead>
-							<tbody>
-								{field.options.map((option, i) => (
-									<tr key={i}>
-										<td>
-											<input
-												type="text"
-												value={option}
-												readOnly
-												className="field-input-option user-input"
-											/>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-				{field.type === "advanced" && (
-					<div className="options-table-container form-table-container">
-						<table className="options-table ">
-							<thead>
-								<tr>
-									<th>Варианты ответа</th>
-									<th>Количество</th>
-								</tr>
-							</thead>
-							<tbody>
-								{field.options.map((option, i) => (
-									<tr key={i}>
-										<td>
-											<input
-												type="text"
-												value={option.answer}
-												readOnly
-												className="field-input-option user-input"
-											/>
-										</td>
-										<td>
-											<input
-												type="text"
-												value={option.quantity}
-												readOnly
-												className="field-input-option user-input"
-											/>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-			</div>
-		);
-	};
 
+	 const renderField = (field, index) => {
+		// Получаем чистое название поля без /////textarea
+		const fieldLabel = field.label.split('/////')[0];
+		
+		return (
+		  <div className="field-group" key={index}>
+			 <label className="field-label">{fieldLabel}</label>
+			 {field.type === "text" && (
+				<input type="text" className="field-input user-input" readOnly />
+			 )}
+			 {field.type === "multiple" && (
+				<div className="options-container">
+				  {field.options.map((option, i) => (
+					 <label key={i}>
+						<input
+						  type="radio"
+						  className="option-input"
+						  name={fieldLabel}
+						  value={option}
+						  disabled={true}
+						/>
+						{option}
+					 </label>
+				  ))}
+				</div>
+			 )}
+			 {field.type === "textarea" && (
+				<textarea 
+				  className="field-input field-textarea user-input" 
+				  readOnly 
+				/>
+			 )}
+		  </div>
+		);
+	 };
+	 
 	return (
 		<div className="event-create-container">
 			<form className="event-form" onSubmit={handleSubmit}>
@@ -201,6 +201,30 @@ const EventCreate = () => {
 							type="number"
 							name="participantCount"
 							value={formData.participantCount}
+							onChange={handleInputChange}
+							className="field-input"
+							required
+						/>
+					</div>
+
+					<div className="field-group">
+						<label className="field-label">Дата мероприятия:</label>
+						<input
+							type="date"
+							name="eventDate"
+							value={formData.eventDate}
+							onChange={handleInputChange}
+							className="field-input"
+							required
+						/>
+					</div>
+
+					<div className="field-group">
+						<label className="field-label">Время начала мероприятия:</label>
+						<input
+							type="time"
+							name="eventTime"
+							value={formData.eventTime}
 							onChange={handleInputChange}
 							className="field-input"
 							required
