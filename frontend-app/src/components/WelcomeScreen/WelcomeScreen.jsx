@@ -3,11 +3,11 @@ import { Button } from "@mui/base";
 import { useState, useEffect } from 'react';
 import LinksPopup from '../LinksPopup/LinksPopup';
 import './welcomeScreen.scss';
+import axios from 'axios';
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
   const [formCode, setFormCode] = useState('');
-  const { eventId } = useParams();
   const [showLinksPopup, setShowLinksPopup] = useState(false);
   const [links, setLinks] = useState(null);
 
@@ -21,21 +21,21 @@ export default function WelcomeScreen() {
       localStorage.removeItem('popupLinks');
     }
   }, []);
+
   const handleCreateForm = () => {
     navigate('/create');
   };
 
-  const handleFormCodeSubmit = () => {
-	const events = JSON.parse(localStorage.getItem('events') || '[]');
-	const event = events.find(e => e.id === parseInt(formCode));
-	
-	if (event) {
-	  navigate(`/register/${formCode}`);
-	} else {
-	  alert('Мероприятие не найдено!');
-	}
- };
-
+  const handleFormCodeSubmit = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/v1/events/${formCode}`);
+      if (response.data) {
+        navigate(`/register/${formCode}`);
+      }
+    } catch (error) {
+      alert('Мероприятие не найдено!');
+    }
+  };
 
   return (
 	<div className="welcome-container">

@@ -2,26 +2,45 @@ import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Button } from "@mui/base";
 import './eventRegister.scss'
+import axios from 'axios';
+// остальные импорты оставляем
 
 const EventRegister = () => {
-	const { eventId } = useParams();
-	const navigate = useNavigate();
-	const [event, setEvent] = useState(null);
-	const [formData, setFormData] = useState({
-		name: '',
-		email: '',
-		phone: '',
-		description: '',
-		additionalAnswers: {}
-	});
+  const { eventId } = useParams();
+  const navigate = useNavigate();
+  const [event, setEvent] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    description: '',
+    additionalAnswers: {}
+  });
 
-	useEffect(() => {
-		const events = JSON.parse(localStorage.getItem('events') || '[]');
-		const currentEvent = events.find(e => e.id === parseInt(eventId));
-		if (currentEvent) {
-			setEvent(currentEvent);
-		}
-	}, [eventId]);
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/events/${eventId}`);
+        const eventData = response.data;
+        setEvent({
+          id: eventData.id,
+          eventTitle: eventData.name,
+          description: eventData.description,
+          participantCount: eventData.meetings[0]?.availablePlaces || 0,
+          files: eventData.files,
+          additionalFields: eventData.formFields.map(field => ({
+            label: field.name,
+            type: 'text',
+            required: field.required
+          }))
+        });
+      } catch (error) {
+        console.error('Ошибка при получении данных:', error);
+      }
+    };
+
+    fetchEvent();
+  }, [eventId]);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
