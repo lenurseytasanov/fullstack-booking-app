@@ -5,6 +5,7 @@ import WelcomeScreen from './components/WelcomeScreen/WelcomeScreen';
 import EventCreate from './components/EventCreate/EventCreate';
 import EventRegister from './components/EventRegister/EventRegister';
 import EventResult from './components/EventResult/EventResult';
+import Contacts from './components/Contacts/Contacts';
 
 const Layout = ({ children, title }) => (
 	<>
@@ -18,6 +19,7 @@ const Layout = ({ children, title }) => (
 	  <Router>
 		 <Routes>
 			<Route path="/" element={<WelcomeScreen />} />
+			<Route path="/contacts" element={<Contacts />} />
 			<Route path="/create" element={
 			  <Layout title={{parent: "Навигация", name: "Создание анкеты"}}>
 				 <EventCreate />

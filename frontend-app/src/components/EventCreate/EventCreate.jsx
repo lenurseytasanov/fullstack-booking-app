@@ -4,6 +4,7 @@ import AddFieldPopup from '../AddFieldPopup/AddFieldPopup';
 import LinksPopup from '../LinksPopup/LinksPopup';
 import { Button } from "@mui/base";
 import "./eventCreate.scss";
+import api from '../../axios';
 
 const EventCreate = () => {
 	const navigate = useNavigate();
@@ -41,34 +42,45 @@ const EventCreate = () => {
 		setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-	 
+	
 		const eventData = {
-		  id: Date.now(),
-		  ...formData,
-		  additionalFields,
-		  files: selectedFiles.map(file => ({
-			 name: file.name,
-			 url: URL.createObjectURL(file)
-		  }))
+			adminName: formData.name,
+			adminEmail: formData.email,
+			name: formData.eventTitle,
+			description: formData.description,
+			files: [], // Здесь должны быть ID файлов
+			meetings: [
+				{
+					availablePlaces: parseInt(formData.participantCount),
+					startsAt: new Date().toISOString()
+				}
+			],
+			formFields: additionalFields.map(field => ({
+				name: field.label,
+				required: true
+			}))
 		};
-	 
-		const events = JSON.parse(localStorage.getItem('events') || '[]');
-		events.push(eventData);
-		localStorage.setItem('events', JSON.stringify(events));
-	 
-		const links = {
-		  register: `/register/${eventData.id}`,
-		  results: `/results/${eventData.id}`,
-		  code: `${eventData.id}`
-		};
-	 
-		localStorage.setItem('showLinksPopup', 'true');
-		localStorage.setItem('popupLinks', JSON.stringify(links));
+
+		try {
+			const response = await api.post('/api/v1/events', eventData);
+			const newEventId = response.data.id;
+			const links = {
+				register: `/register/${newEventId}`,
+				results: `/results/${newEventId}`,
+				code: newEventId
+			};
+
+			localStorage.setItem('showLinksPopup', 'true');
+			localStorage.setItem('popupLinks', JSON.stringify(links));
 		
-		navigate('/');
-	 };
+			navigate('/');
+		} catch (error) {
+			console.error('Ошибка при создании мероприятия:', error);
+			alert('Не удалось создать мероприятие');
+		}
+	};
 	 
 
 	const renderField = (field, index) => {
