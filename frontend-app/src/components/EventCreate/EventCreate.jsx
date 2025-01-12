@@ -71,9 +71,9 @@ const EventCreate = () => {
 		const uploadedFiles = await Promise.all(
 		  selectedFiles.map(file => handleFileUpload(file))
 		);
-	 
+	
 		const eventDateTime = new Date(`${formData.eventDate}T${formData.eventTime}`);
-	 
+	
 		const eventData = {
 		  adminName: formData.name,
 		  adminEmail: formData.email,
@@ -86,14 +86,19 @@ const EventCreate = () => {
 				startsAt: eventDateTime.toISOString()
 			 }
 		  ],
-		  formFields: additionalFields.map(field => ({
-			 name: field.type === 'multiple' ? 
-				`${field.label}/////${field.options.join('/////')}` : 
-				field.type === 'textarea' ?
-				`${field.label}/////textarea` :
-				field.label,
-			 required: true
-		  }))
+		  formFields: [
+			 { name: "ФИО", required: true },
+			 { name: "E-mail", required: true },
+			 { name: "Номер телефона", required: true },
+			 ...additionalFields.map(field => ({
+				name: field.type === 'multiple' ? 
+				  `${field.label}/////${field.options.join('/////')}` : 
+				  field.type === 'textarea' ?
+				  `${field.label}/////textarea` :
+				  field.label,
+				required: true
+			 }))
+		  ]
 		};
 	 
 	 

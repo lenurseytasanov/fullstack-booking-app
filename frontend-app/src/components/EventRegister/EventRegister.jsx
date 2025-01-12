@@ -13,8 +13,11 @@ const EventRegister = () => {
 		email: '',
 		phone: '',
 		description: '',
-		additionalAnswers: {}
-	});
+		additionalAnswers: {},
+		ФИО: '',
+		'E-mail': '',
+		'Номер телефона': ''
+  });
 
 	useEffect(() => {
 		const fetchEvent = async () => {
@@ -46,15 +49,18 @@ const EventRegister = () => {
 					};
 				};
 
-				setEvent({
+				const parsedEvent = {
 					id: eventData.id,
 					eventTitle: eventData.name,
 					description: eventData.description,
 					participantCount: eventData.meetings[0]?.availablePlaces || 0,
 					startsAt: eventData.meetings[0]?.startsAt,
 					files: eventData.files,
+					meetings: eventData.meetings,
 					additionalFields: eventData.formFields.map(parseFormField)
-				});
+				};
+
+				setEvent(parsedEvent);
 			} catch (error) {
 				console.error('Ошибка при получении данных:', error);
 			}
@@ -62,6 +68,7 @@ const EventRegister = () => {
 
 		fetchEvent();
 	}, [eventId]);
+
 
 
 	const handleInputChange = (e) => {
@@ -107,22 +114,41 @@ const EventRegister = () => {
 		}
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+		
+		try {
+			 if (!event || !event.meetings || !event.meetings[0]) {
+				  throw new Error('Данные о встрече недоступны');
+			 }
+  
+			 const requestData = {
+				  attributes: {
+						"ФИО": formData.name,
+						"E-mail": formData.email,
+						"Номер телефона": formData.phone,
+						...formData.additionalAnswers
+				  },
+				  meetingIds: [event.meetings[0].id]
+			 };
+  
+			 const response = await axios.post(`/api/v1/events/${eventId}/participants`, requestData);
+			 
+			 alert('Вы успешно зарегистрировались!');
+			 navigate('/');
+		} catch (error) {
+			 console.error('Детали ошибки:', error.response?.data || error.message);
+			 
+			 if (error.response?.status === 400) {
+				  alert(`Ошибка валидации: ${error.response.data?.message || 'Проверьте правильность заполнения полей'}`);
+			 } else {
+				  alert(`Ошибка при регистрации: ${error.response?.data?.message || error.message}`);
+			 }
+		}
+  };
+  
 
-		const participantData = {
-			id: Date.now(),
-			eventId: Number(eventId),
-			...formData,
-			registrationDate: new Date().toISOString()
-		};
 
-		const participants = JSON.parse(localStorage.getItem(`participants_${eventId}`) || '[]');
-		participants.push(participantData);
-		localStorage.setItem(`participants_${eventId}`, JSON.stringify(participants));
-
-		navigate('/');
-	};
 
 	if (!event) return <div>Мероприятие не найдено</div>;
 
@@ -153,7 +179,7 @@ const EventRegister = () => {
 						<div className="event-info-card">
 							<div className="info-icon">👥</div>
 							<div className="info-content">
-								<span className="info-label">Количество мест</span>
+								<span className="info-label">Осталось свободных мест</span>
 								<span className="info-value">{event.participantCount}</span>
 							</div>
 						</div>
@@ -192,55 +218,42 @@ const EventRegister = () => {
 				<section className="form-section">
 					<h2 className="event-section-title">Заполните анкету</h2>
 
-					<div className="field-group">
-						<label className="field-label">ФИО</label>
-						<input
-							type="text"
-							name="name"
-							value={formData.name}
-							onChange={handleInputChange}
-							className="field-input"
-							required
-						/>
-					</div>
-
-					<div className="field-group">
-						<label className="field-label">E-mail:</label>
-						<input
-							type="email"
-							name="email"
-							value={formData.email}
-							onChange={handleInputChange}
-							className="field-input"
-							required
-						/>
-					</div>
-
-					<div className="field-group">
-						<label className="field-label">Номер телефона:</label>
-						<input
-							type="tel"
-							name="phone"
-							value={formData.phone}
-							onChange={handleInputChange}
-							className="field-input"
-							required
-						/>
-					</div>
-
-
 					{event.additionalFields
 						.sort((a, b) => {
 							const fieldOrder = {
-								'text': 1,
-								'multiple': 2,
-								'textarea': 3
+								'ФИО': 1,
+								'E-mail': 2,
+								'Номер телефона': 3,
+								'text': 4,
+								'multiple': 5,
+								'textarea': 6
 							};
+
+							if (fieldOrder[a.label] !== undefined) {
+								return fieldOrder[a.label] - (fieldOrder[b.label] || fieldOrder[b.type]);
+							}
 							return fieldOrder[a.type] - fieldOrder[b.type];
 						})
 						.map((field, index) => (
 							<div className="field-group" key={index}>
-								{field.type === "text" && (
+								{(field.label === "ФИО" || field.label === "E-mail" || field.label === "Номер телефона") ? (
+									<>
+										<label className="field-label">{field.label}</label>
+										<input
+											type={field.label === "E-mail" ? "email" : field.label === "Номер телефона" ? "tel" : "text"}
+											name={field.label === "ФИО" ? "name" : field.label === "E-mail" ? "email" : "phone"}
+											value={formData[field.label === "ФИО" ? "name" : field.label === "E-mail" ? "email" : "phone"]}
+											onChange={handleInputChange}
+											className="field-input"
+											placeholder={
+												field.label === "ФИО" ? "Иванов Иван Иванович" : 
+												field.label === "E-mail" ? "example@mail.ru" : 
+												"+7 (999) 999-99-99"
+											}
+											required
+										/>
+									</>
+								) : field.type === "text" && (
 									<>
 										<label className="field-label">{field.label}</label>
 										<input
