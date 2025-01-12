@@ -28,7 +28,7 @@ export default function WelcomeScreen() {
 
   const handleFormCodeSubmit = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/events/${formCode}`);
+      const response = await axios.get(`/api/v1/events/${formCode}`);
       if (response.data) {
         navigate(`/register/${formCode}`);
       }

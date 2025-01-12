@@ -39,35 +39,43 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 	}, [handleEscapeKey]);
 
 	const handleSubmit = () => {
-		let fieldData;
-		switch (activeType) {
-			case "text":
-				fieldData = {
-					type: "text",
-					label: textFieldName,
-					value: ""
-				};
-				break;
-			case "multiple":
-				fieldData = {
-					type: "multiple",
-					label: multipleFieldName,
-					options: multipleOptions
-				};
-				break;
-			case "textarea":
-				fieldData = {
-					type: "textarea",
-					label: `${textareaFieldName}/////textarea`,
-					value: ""
-				};
-				break;
-			default:
+  let fieldData;
+  
+  // Проверяем поля в зависимости от типа
+  switch (activeType) {
+    case "text":
+      if (!textFieldName.trim()) return;
+      fieldData = {
+        type: "text",
+        label: textFieldName,
+        value: ""
+      };
+      break;
+      
+    case "multiple":
+      if (!multipleFieldName.trim() || multipleOptions.some(opt => !opt.trim())) return;
+      fieldData = {
+        type: "multiple",
+        label: multipleFieldName,
+        options: multipleOptions
+      };
+      break;
+      
+    case "textarea":
+      if (!textareaFieldName.trim()) return;
+      fieldData = {
+        type: "textarea",
+        label: `${textareaFieldName}/////textarea`,
+        value: ""
+      };
+      break;
+		default:
 				return null;
-		}
-		onAddField(fieldData);
-		onClose();
-	};
+  }
+  
+  onAddField(fieldData);
+  onClose();
+};
 
 
 
@@ -82,6 +90,7 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 							className="field-input"
 							value={textFieldName}
 							onChange={(e) => setTextFieldName(e.target.value)}
+							required
 						/>
 					</div>
 				);
@@ -96,6 +105,7 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 							className="field-input"
 							value={multipleFieldName}
 							onChange={(e) => setMultipleFieldName(e.target.value)}
+							required
 						/>
 
 						<div className="options-table-container">
@@ -115,6 +125,7 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 													value={option}
 													onChange={(e) => handleMultipleOptionChange(index, e.target.value)}
 													className="field-input-option"
+													required
 												/>
 											</td>
 											<td>
@@ -157,6 +168,7 @@ export default function AddFieldPopup({ onClose, onAddField }) {
 							className="field-input"
 							value={textareaFieldName}
 							onChange={(e) => setTextareaFieldName(e.target.value)}
+							required
 						/>
 					</div>
 				);
