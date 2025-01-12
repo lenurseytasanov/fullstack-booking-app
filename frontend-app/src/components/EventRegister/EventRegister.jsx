@@ -82,6 +82,31 @@ const EventRegister = () => {
 		}));
 	};
 
+	const handleFileDownload = async (fileId, fileName) => {
+		try {
+			const response = await axios.get(`/api/v1/files/${fileId}`, {
+				responseType: 'blob'
+			});
+
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', fileName);
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			if (error.response?.status === 404) {
+				alert('Файл не найден');
+			} else if (error.response?.status === 400) {
+				alert('Некорректный запрос');
+			} else {
+				alert('Ошибка при скачивании файла');
+			}
+		}
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -142,21 +167,26 @@ const EventRegister = () => {
 						</div>
 					</div>
 
-
 					{event.files && event.files.length > 0 && (
-						<div className="field-group">
-							<label className="field-label">Файлы мероприятия:</label>
-							<div className="selected-files">
-								{event.files.map((file, index) => (
-									<div key={index} className="file-item">
-										<a href={file.url} download={file.name}>
-											<span>{file.name}</span>
-										</a>
-									</div>
-								))}
+						<div className="event-info-card">
+							<div className="info-icon">📎</div>
+							<div className="info-content">
+								<span className="info-label">Файлы мероприятия</span>
+								<div className="files-list">
+									{event.files.map((file, index) => (
+										<div
+											key={index}
+											className="file-link"
+											onClick={() => handleFileDownload(file.fileId, file.name)}
+										>
+											<span className="info-value">{file.name}</span>
+										</div>
+									))}
+								</div>
 							</div>
 						</div>
 					)}
+
 				</section>
 
 				<section className="form-section">
@@ -199,43 +229,60 @@ const EventRegister = () => {
 					</div>
 
 
-					{event.additionalFields && event.additionalFields.map((field, index) => (
-						<div className="field-group" key={index}>
-							<label className="field-label">{field.label}</label>
-							{field.type === "text" && (
-								<input
-									type="text"
-									onChange={(e) => handleAdditionalFieldChange(field.label, e.target.value)}
-									className="field-input"
-								/>
-							)}
-							{field.type === "multiple" && (
-								<div className="options-container">
-									{field.options.map((option, i) => (
-										<label key={i}>
-											<input
-												type="radio"
-												className="option-input"
-												name={field.label}
-												value={option}
-												onChange={(e) => handleAdditionalFieldChange(field.label, e.target.value)}
-											/>
-											{option}
-										</label>
-									))}
-								</div>
-							)}
-							{field.type === "textarea" && (
-								<div className="field-group">
-									<textarea
-										onChange={(e) => handleAdditionalFieldChange(field.label.split('/////')[0], e.target.value)}
-										className="field-input field-textarea"
-										placeholder=""
-									/>
-								</div>
-							)}
-						</div>
-					))}
+					{event.additionalFields
+						.sort((a, b) => {
+							const fieldOrder = {
+								'text': 1,
+								'multiple': 2,
+								'textarea': 3
+							};
+							return fieldOrder[a.type] - fieldOrder[b.type];
+						})
+						.map((field, index) => (
+							<div className="field-group" key={index}>
+								{field.type === "text" && (
+									<>
+										<label className="field-label">{field.label}</label>
+										<input
+											type="text"
+											onChange={(e) => handleAdditionalFieldChange(field.label, e.target.value)}
+											className="field-input"
+											placeholder=" "
+										/>
+									</>
+								)}
+								{field.type === "multiple" && (
+									<>
+										<label className="field-label">{field.label}</label>
+										<div className="options-container">
+											{field.options.map((option, i) => (
+												<label key={i}>
+													<input
+														type="radio"
+														className="option-input"
+														name={field.label}
+														value={option}
+														onChange={(e) => handleAdditionalFieldChange(field.label, e.target.value)}
+													/>
+													{option}
+												</label>
+											))}
+										</div>
+									</>
+								)}
+
+								{field.type === "textarea" && (
+									<>
+										<label className="field-label">{field.label.split('/////')[0]}</label>
+										<textarea
+											onChange={(e) => handleAdditionalFieldChange(field.label.split('/////')[0], e.target.value)}
+											className="field-input field-textarea"
+											placeholder=" "
+										/>
+									</>
+								)}
+							</div>
+						))}
 					<Button type="submit" className="add-field-button">
 						Зарегистрироваться
 					</Button>

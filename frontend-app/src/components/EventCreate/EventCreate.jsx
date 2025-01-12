@@ -46,18 +46,20 @@ const EventCreate = () => {
 
 	const handleFileUpload = async (file) => {
 		try {
-		  const response = await api.post('/api/v1/files', file, {
-			  headers: {
-				  'Content-Type': 'multipart/form-data',
-				  'Accept': 'application/json'
-			  }
+		  const formData = new FormData();
+		  formData.append('file', file);
+	 
+		  const response = await api.post('/api/v1/files', formData, {
+			 headers: {
+				'Content-Type': 'multipart/form-data'
+			 }
 		  });
 		  
-		  return response.data.fileId;
+		  return response.data;
 		} catch (error) {
 		  console.error('Детали ошибки загрузки:', {
-			  status: error.response?.status,
-			  data: error.response?.data
+			 status: error.response?.status,
+			 data: error.response?.data
 		  });
 		  return null;
 		}
@@ -118,7 +120,6 @@ const EventCreate = () => {
 
 
 	 const renderField = (field, index) => {
-		// Получаем чистое название поля без /////textarea
 		const fieldLabel = field.label.split('/////')[0];
 		
 		return (
