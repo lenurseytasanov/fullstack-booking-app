@@ -13,10 +13,7 @@ const EventRegister = () => {
 		email: '',
 		phone: '',
 		description: '',
-		additionalAnswers: {},
-		ФИО: '',
-		'E-mail': '',
-		'Номер телефона': ''
+		additionalAnswers: {}
   });
 
 	useEffect(() => {
@@ -36,7 +33,7 @@ const EventRegister = () => {
 							};
 						}
 						return {
-							label: parts[0],
+							label: field.name,
 							type: 'multiple',
 							required: field.required,
 							options: parts.slice(1)
@@ -266,7 +263,7 @@ const EventRegister = () => {
 								)}
 								{field.type === "multiple" && (
 									<>
-										<label className="field-label">{field.label}</label>
+										<label className="field-label">{field.label.split('/////')[0]}</label>
 										<div className="options-container">
 											{field.options.map((option, i) => (
 												<label key={i}>
@@ -275,7 +272,7 @@ const EventRegister = () => {
 														className="option-input"
 														name={field.label}
 														value={option}
-														onChange={(e) => handleAdditionalFieldChange(field.label, e.target.value)}
+														onChange={(e) => handleAdditionalFieldChange(`${field.label}`, e.target.value)}
 													/>
 													{option}
 												</label>
@@ -286,9 +283,9 @@ const EventRegister = () => {
 
 								{field.type === "textarea" && (
 									<>
-										<label className="field-label">{field.label.split('/////')[0]}</label>
+										<label className="field-label">{field.label}</label>
 										<textarea
-											onChange={(e) => handleAdditionalFieldChange(field.label.split('/////')[0], e.target.value)}
+											onChange={(e) => handleAdditionalFieldChange(`${field.label}/////textarea/////textarea`, e.target.value)}
 											className="field-input field-textarea"
 											placeholder=" "
 										/>
