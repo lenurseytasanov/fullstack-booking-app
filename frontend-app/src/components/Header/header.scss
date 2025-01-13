@@ -19,22 +19,6 @@ $cub: cubic-bezier(.48,.43,.29,1.3);
 $backCub: cubic-bezier(0.49,-0.3,.68,1.23);
 $textCub: cubic-bezier(.48,.43,.7,2.5);
 
-#blurry-filter {
-  width: 100%;
-  height: rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100' height='100' style='filter:url(%23f)' opacity='.2'/%3E%3C/svg%3E");
-  mask: linear-gradient(black 7rem, transparent);
-  -webkit-mask: linear-gradient(black 7rem, transparent);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 1;
-  pointer-events: none;
-  touch-action: none;
-}
-
 body {
   margin: 0;
   padding: 0;
