@@ -30,7 +30,7 @@ export default function LinksPopup({ onClose, links }) {
         <div className="field-form">
           <div className="links-group">
             <p>Ссылка для регистрации:</p>
-            <LinksForm value={`http://localhost:3000${links.register}`} />
+            <LinksForm value={`https://fullstack-booking-app-nine.vercel.app${links.register}`} />
           </div>
           <div className="links-group">
             <p>Код:</p>
@@ -38,7 +38,7 @@ export default function LinksPopup({ onClose, links }) {
           </div>
           <div className="links-group">
             <p>Ссылка на результаты:</p>
-            <LinksForm value={`http://localhost:3000${links.results}`} />
+            <LinksForm value={`https://fullstack-booking-app-nine.vercel.app${links.results}`} />
           </div>
         </div>
       </div>
